@@ -3,7 +3,9 @@ module INSTR_DATA(
 	input clk,
 	input wire[31:0] instruction,
 	output reg[2:0] instr_type,
-	output reg[3:0] data_instr_type
+	output reg[3:0] data_instr_type,
+	output reg[2:0] mem_instr_type,
+	output reg[2:0] jmp_instr_type
     );
 
 
@@ -19,6 +21,14 @@ module INSTR_DATA(
 										  !instruction[25] && !instruction[24] && !instruction[7] && 
 										  instruction[6] && instruction[5] && !instruction[4] ? 3'b100 : 
 										  3'b000;
+		
+		mem_instr_type =  data_instr_type == 1 ? 1 : 
+				  data_instr_type == 2 ? 2 : 
+				  0;
+								 
+		 jmp_instr_type =  instruction[25] && !instruction[24] ? 2'b01 :
+								 instruction[25] && instruction[24] ? 2'b10 : 
+								 2'b00;
 		 end
 
 endmodule
